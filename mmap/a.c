@@ -10,7 +10,7 @@
 #define BASE_ADDR 0x02000000
 #define MMAP_SIZE 4685824
 
-int main(void)
+int main(int argc, char *argv[])
 {
 
         int fd;
@@ -34,7 +34,7 @@ int main(void)
         for(int i = 0;i < 5;i++){
                 //创建并打开文件
                 char filename[20];
-                sprintf(filename, "snap-open-mdns-%d.bin", i);
+                sprintf(filename, "snap-mdns-%s.bin", argv[1]);
                 FILE *file = fopen(filename, "wb+");
                 if (!file){
                         perror("fopen");
@@ -47,5 +47,6 @@ int main(void)
                 fclose(file);
                 sleep(1);
         }
+        close(fd);
         return 0;
 }
