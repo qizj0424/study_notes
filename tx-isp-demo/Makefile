@@ -7,6 +7,7 @@
 # 注意: 不同的开发板不同的编译器上述3个环境变量不一定相同,
 #       请参考各开发板的高级用户使用手册
 
+#CROSS_COMPILE ?= mips-linux-gnu-
 MODULE_NAME := tx-isp
 
 EXTRA_CFLAGS += -I$(PWD)/inc
@@ -14,6 +15,7 @@ EXTRA_CFLAGS += -I$(PWD)/inc
 $(MODULE_NAME)-objs = src/tx-isp-device.o \
 		      src/tx-isp-vic.o \
 	              src/tx-isp-core.o \
+	              src/tx-isp-my.o \
 
 obj-m:=$(MODULE_NAME).o
 
@@ -23,6 +25,7 @@ CURRENT_PATH           :=$(shell pwd)
 LINUX_KERNEL           :=$(shell uname -r)
 
 LINUX_KERNEL_PATH      :=/lib/modules/$(LINUX_KERNEL)/build
+#LINUX_KERNEL_PATH 	:= ${ISVP_ENV_KERNEL_DIR}
 #KERN_DIR = /home/book/100ask_roc-rk3399-pc/linux-4.4
 
 all:
@@ -30,6 +33,7 @@ all:
 	make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) modules 
 	
 	$(CROSS_COMPILE)gcc -o test test.c 
+	@cp tx-isp.ko /home/zjqi/nfsroot -v
 
 clean:
 	make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) clean
