@@ -2,11 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define BUFFER_SIZE (1920*1080)
+#define BUFFER_SIZE (1920*1080)//文件前面字节数
+#define LAST_SIZE (1920*1080/2)//文件最后字节数
 
 int main() {
     FILE *input_file, *output_file;
-    unsigned char buffer[BUFFER_SIZE * 3/2];
+    unsigned char buffer[BUFFER_SIZE+LAST_SIZE];
 
     // 打开输入文件
     input_file = fopen("4-all.yuv", "rb");
@@ -41,13 +42,13 @@ int main() {
     size_t bytes_read_first = fread(buffer, sizeof(unsigned char), BUFFER_SIZE, input_file);
 
     // 将文件指针移动到倒数第1080个字节位置
-    fseek(input_file, -(1920*1080/2), SEEK_END);
+    fseek(input_file, -LAST_SIZE, SEEK_END);
 
     // 读取并保存最后1080个字节的内容
-    size_t bytes_read_last = fread(buffer + BUFFER_SIZE, sizeof(unsigned char), BUFFER_SIZE/2, input_file);
+    size_t bytes_read_last = fread(buffer + BUFFER_SIZE, sizeof(unsigned char), LAST_SIZE, input_file);
 
     // 将读取到的内容写入输出文件
-    size_t bytes_written = fwrite(buffer, sizeof(unsigned char), BUFFER_SIZE*3/2, output_file);
+    size_t bytes_written = fwrite(buffer, sizeof(unsigned char), BUFFER_SIZE+LAST_SIZE, output_file);
 
     // 关闭文件
     fclose(input_file);
