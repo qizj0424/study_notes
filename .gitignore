@@ -1,0 +1,16 @@
+build/
+doc/html*
+*.o
+external/vpu/x264.r1376
+include/include_link
+tags
+*.o.cmd
+*mod.c
+*ko
+*cmd
+*order
+*symvers
+.tmp_versions/
+.csc
+.git
+trans.sh
