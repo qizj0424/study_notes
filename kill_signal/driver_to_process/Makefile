@@ -22,10 +22,10 @@ all:
 
 	make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) modules 
 	
-	$(CROSS_COMPILE)gcc -muclibc  -o kill_to_progress kill_to_progress.c 
+	$(CROSS_COMPILE)gcc -muclibc  -o kill_to_process kill_to_process.c 
 
 clean:
 	make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) clean
 	rm -rf modules.order
-	rm -f kill_to_progress 
+	rm -f kill_to_process 
 

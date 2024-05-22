@@ -62,7 +62,6 @@ static int hello_drv_close (struct inode *node, struct file *file)
 	return 0;
 }
 
-/* 2. 定义自己的file_operations结构体                                              */
 static struct file_operations hello_drv = {
 	.owner	 = THIS_MODULE,
 	.open    = hello_drv_open,
@@ -70,13 +69,10 @@ static struct file_operations hello_drv = {
 	.release = hello_drv_close,
 };
 
-/* 4. 把file_operations结构体告诉内核：注册驱动程序                                */
-/* 5. 谁来注册驱动程序啊？得有一个入口函数：安装驱动程序时，就会去调用这个入口函数 */
 static int __init hello_init(void)
 {
 	int err;
 
-	printk("%s %s line %d\n", __FILE__, __FUNCTION__, __LINE__);
 	major = register_chrdev(0, "hello", &hello_drv);  /* /dev/hello */
 
 
@@ -93,17 +89,14 @@ static int __init hello_init(void)
 	return 0;
 }
 
-/* 6. 有入口函数就应该有出口函数：卸载驱动程序时，就会去调用这个出口函数           */
 static void __exit hello_exit(void)
 {
-	printk("%s %s line %d\n", __FILE__, __FUNCTION__, __LINE__);
 	device_destroy(hello_class, MKDEV(major, 0));
 	class_destroy(hello_class);
 	unregister_chrdev(major, "hello");
 }
 
 
-/* 7. 其他完善：提供设备信息，自动创建设备节点                                     */
 
 module_init(hello_init);
 module_exit(hello_exit);
