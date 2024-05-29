@@ -16,7 +16,7 @@
 #include <linux/kmod.h>
 #include <linux/gfp.h>
 #include <linux/slab.h>
-#include <tx-isp.h>
+#include <driver-demo.h>
 
 static u64 tx_isp_module_dma_mask = ~(u64)0;
 
@@ -231,7 +231,7 @@ struct tx_isp_device_descriptor tx_video_device = {
 };
 
 struct platform_device tx_isp_platform_device = {
-	.name = "tx-isp",
+	.name = "driver-demo",
 	.id = -1,
 	.dev = {
 		.dma_mask = &tx_isp_module_dma_mask,
@@ -857,7 +857,7 @@ int tx_isp_create_graph_and_nodes(struct tx_isp_device* ispdev)
 			ret = misc_register(&module->miscdev);
 			if (ret < 0) {
 				ret = -ENOENT;
-				printk("Failed to register tx-isp miscdev(%d.%d)!\n", module->desc.parentid, module->desc.unitid);
+				printk("Failed to register driver-demo miscdev(%d.%d)!\n", module->desc.parentid, module->desc.unitid);
 				goto failed_misc_register;
 			}
 		}
@@ -900,13 +900,13 @@ static int tx_isp_probe(struct platform_device *pdev)
 	module = &ispdev->module;
 
 	module->miscdev.minor = MISC_DYNAMIC_MINOR;
-	module->miscdev.name = "tx-isp";
+	module->miscdev.name = "driver-demo";
 	module->miscdev.fops = &tx_isp_fops;
-        //创建/dev/tx-isp/节点
+        //创建/dev/driver-demo/节点
 	ret = misc_register(&module->miscdev);
 	if (ret < 0) {
 		ret = -1;
-		printk("Failed to register tx-isp miscdev!\n");
+		printk("Failed to register driver-demo miscdev!\n");
 		goto failed_misc_register;
 	}
 
@@ -930,7 +930,7 @@ static struct platform_driver tx_isp_driver = {
 	.probe = tx_isp_probe,
 	.remove = __exit_p(tx_isp_remove),
 	.driver = {
-		.name = "tx-isp",
+		.name = "driver-demo",
 		.owner = THIS_MODULE,
 	},
 };

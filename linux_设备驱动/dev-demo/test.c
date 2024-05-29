@@ -26,10 +26,10 @@ int main(int argc, char **argv)
 	}
 
 	/* 2. 打开文件 */
-	fd = open("/dev/tx-isp", O_RDWR);
+	fd = open("/dev/driver-demo", O_RDWR);
 	if (fd == -1)
 	{
-		printf("can not open file /dev/tx-isp\n");
+		printf("can not open file /dev/driver-demo\n");
 		return -1;
 	}
         ioctl(fd, 1, NULL);

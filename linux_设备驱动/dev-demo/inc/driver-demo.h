@@ -2,8 +2,8 @@
 #define __TX_ISP_H__
 
 #include <linux/miscdevice.h>
-#include <tx-isp-pad.h>
-#include <tx-isp-libfunc.h>
+#include <driver-demo-pad.h>
+#include <driver-demo-libfunc.h>
 
 #define TX_ISP_DRIVER_VERSION "H20231120a-zjqi"
 

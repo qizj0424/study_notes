@@ -1,7 +1,7 @@
 #ifndef __TX_ISP_PAD_H__
 #define __TX_ISP_PAD_H__
 
-#include <tx-isp.h>
+#include <driver-demo.h>
 /* Description of the connection between modules */
 struct link_pad_description {
 	char *name; 		// the module name

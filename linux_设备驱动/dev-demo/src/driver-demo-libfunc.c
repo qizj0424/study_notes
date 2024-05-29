@@ -1,5 +1,5 @@
 #include <linux/slab.h>
-#include <tx-isp-libfunc.h>
+#include <driver-demo-libfunc.h>
 
 void *private_kmalloc(size_t size, gfp_t flags)
 {

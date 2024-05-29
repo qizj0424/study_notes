@@ -8,16 +8,16 @@
 #       请参考各开发板的高级用户使用手册
 
 CROSS_COMPILE ?= mips-linux-gnu-
-MODULE_NAME := tx-isp
+MODULE_NAME := driver-demo
 
 EXTRA_CFLAGS += -I$(PWD)/inc
 
-$(MODULE_NAME)-objs = src/tx-isp-libfunc.o \
-		      src/tx-isp-device.o \
-		      src/tx-isp-vic.o \
-	              src/tx-isp-core.o \
-	              src/tx-isp-fs.o \
-	              src/tx-isp-fs1.o \
+$(MODULE_NAME)-objs = src/driver-demo-libfunc.o \
+		      src/driver-demo-device.o \
+		      src/driver-demo-vic.o \
+	              src/driver-demo-core.o \
+	              src/driver-demo-fs.o \
+	              src/driver-demo-fs1.o \
 
 obj-m:=$(MODULE_NAME).o
 
@@ -35,7 +35,7 @@ all:
 	make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) modules 
 	
 	$(CROSS_COMPILE)gcc -o test test.c 
-	@cp tx-isp.ko /home/zjqi/nfsroot -v
+	@cp driver-demo.ko /home/zjqi/nfsroot -v
 
 clean:
 	make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) clean

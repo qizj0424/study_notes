@@ -1,7 +1,7 @@
 #include <linux/platform_device.h>
 #include <linux/slab.h>
 #include <linux/fs.h>
-#include <tx-isp.h>
+#include <driver-demo.h>
 
 struct isp_core_output_channel {
 	int index;

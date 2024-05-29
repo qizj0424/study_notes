@@ -1,6 +1,6 @@
 #include <linux/platform_device.h>
 #include <linux/slab.h>
-#include <tx-isp.h>
+#include <driver-demo.h>
 struct tx_isp_vic_device {
 	/* the common parameters */
 	struct tx_isp_subdev sd;
