@@ -1,6 +1,9 @@
 #ifndef __TX_ISP_H__
 #define __TX_ISP_H__
+
 #include <linux/miscdevice.h>
+#include <tx-isp-pad.h>
+#include <tx-isp-libfunc.h>
 
 #define TX_ISP_DRIVER_VERSION "H20231120a-zjqi"
 
@@ -24,7 +27,8 @@
 #define TX_ISP_VIN_NAME "isp-w00"
 #define TX_ISP_CSI_NAME "isp-w01"
 #define TX_ISP_VIC_NAME "isp-w02"
-#define TX_ISP_MY_NAME "isp-my"
+#define TX_ISP_FS_NAME "isp-fs"
+#define TX_ISP_FS1_NAME "isp-fs1"
 #define TX_ISP_CORE_NAME "isp-m0"
 #define TX_ISP_IVDC_NAME "isp-ivdc"
 #define TX_ISP_LDC_NAME "isp-m1"
@@ -57,13 +61,33 @@
 
 #define TX_ISP_PLATFORM_MAX_NUM 16
 
+
+struct tx_isp_widget_descriptor {
+	unsigned char  type;
+	unsigned char  subtype;
+	unsigned char  parentid;
+	unsigned char  unitid;
+	unsigned char  clks_num;
+	struct tx_isp_device_clk *clks;
+};
+
+
 struct tx_isp_platform {
 	struct platform_device *dev;
 	struct platform_driver *drv;
 };
 
+/* All TX descriptors have these 2 fields at the beginning */
+struct tx_isp_descriptor {
+	unsigned char  type;
+	unsigned char  subtype;
+	unsigned char  parentid;
+	unsigned char  unitid;
+};
+
 #define TX_ISP_ENTITY_ENUM_MAX_DEPTH	16
 struct tx_isp_module {
+	struct tx_isp_descriptor desc;
 	struct device *dev;
 	const char *name;
 	struct miscdevice miscdev;
@@ -89,6 +113,7 @@ struct tx_isp_device {
 
 	char *version;
 	struct mutex mlock;
+	int active_link[3];
 	spinlock_t slock;
 };
 
@@ -114,14 +139,21 @@ struct tx_isp_device_descriptor {
 };
 
 struct tx_isp_subdev {
+	struct tx_isp_module module;
+
 	/* basic members */
 	struct resource *res;
 	void __iomem *base;
 	unsigned int clk_num;
+        struct tx_isp_subdev_ops *ops;
+
 
 	/* expanded members */
 	unsigned short num_outpads;			/* Number of sink pads */
 	unsigned short num_inpads;			/* Number of source pads */
+
+	struct tx_isp_subdev_pad *outpads;		/* OutPads array (num_pads elements) */
+	struct tx_isp_subdev_pad *inpads;		/* InPads array (num_pads elements) */
 
 	void *dev_priv;
 	void *host_priv;
@@ -132,8 +164,13 @@ struct tx_isp_subdev {
 #define irqdev_to_subdev(dev) (container_of(dev, struct tx_isp_subdev, irqdev))
 #define module_to_ispdev(mod) (container_of(mod, struct tx_isp_device, module))
 
+int tx_isp_subdev_init(struct platform_device *pdev, struct tx_isp_subdev *sd, struct tx_isp_subdev_ops *ops);
+void tx_isp_subdev_deinit(struct tx_isp_subdev *sd);
+
+int tx_isp_send_event_to_remote(struct tx_isp_subdev_pad *pad, unsigned int cmd, void *data);
 
 extern struct platform_driver tx_isp_core_driver;
 extern struct platform_driver tx_isp_vic_driver;
-extern struct platform_driver tx_isp_my_driver;
+extern struct platform_driver tx_isp_fs_driver;
+extern struct platform_driver tx_isp_fs1_driver;
 #endif /*__TX_ISP_H__*/

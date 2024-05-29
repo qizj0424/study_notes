@@ -15,7 +15,7 @@ static int tx_isp_vic_probe(struct platform_device *pdev)
 	struct tx_isp_vic_device *vic_dev = NULL;
         int ret = 0;
 
-        vic_dev = (struct tx_isp_vic_device *)kmalloc(sizeof(*vic_dev), GFP_KERNEL);
+        vic_dev = (struct tx_isp_vic_device *)private_kmalloc(sizeof(*vic_dev), GFP_KERNEL);
         if(!vic_dev){
                 printk("Failed to allocate sensor device\n");
                 ret = -1;
@@ -33,7 +33,7 @@ exit:
 static int __exit tx_isp_vic_remove(struct platform_device *pdev)
 {
 	struct tx_isp_vic_device *vic_dev = platform_get_drvdata(pdev);
-        kfree(vic_dev);
+        private_kfree(vic_dev);
 
 	return 0;
 }
