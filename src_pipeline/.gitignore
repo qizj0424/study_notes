@@ -1,0 +1,6 @@
+*.cmd
+*.o
+tags
+.csc
+build
+

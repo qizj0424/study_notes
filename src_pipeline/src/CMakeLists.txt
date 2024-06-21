@@ -1,0 +1,25 @@
+INCLUDE(srcs.cmake)
+
+ADD_LIBRARY(imp_static_uclibc STATIC ${LIBIMP_SRCS} ${EXT_STATIC_UCLIBC_OBJS})
+ADD_LIBRARY(imp_shared_uclibc SHARED ${LIBIMP_SRCS} ${EXT_SHARED_UCLIBC_OBJS})
+
+SET_TARGET_PROPERTIES(imp_shared_uclibc PROPERTIES
+    OUTPUT_NAME "imp"
+    LINK_FLAGS "-muclibc -lpthread -ldl"
+    COMPILE_FLAGS "-muclibc"
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib-uclibc
+)
+
+SET_TARGET_PROPERTIES(imp_static_uclibc PROPERTIES
+    OUTPUT_NAME "imp"
+    LINK_FLAGS "-muclibc -ldl"
+    COMPILE_FLAGS "-muclibc"
+    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib-uclibc
+)
+
+INSTALL(TARGETS imp_static_uclibc imp_shared_uclibc
+    ARCHIVE DESTINATION ${LIB_INSTALL_DIR_UCLIBC}
+    LIBRARY DESTINATION ${LIB_INSTALL_DIR_UCLIBC}
+)
+
+#ADD_SUBDIRECTORY(core)
